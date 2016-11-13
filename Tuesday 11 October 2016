@@ -1,0 +1,208 @@
+# ICS 31, Tuesday 11 October 2016, 11am
+
+## Loops for repetition
+
+## For-each version of a for-loop
+L = ['Huey', 'Dewey', 'Louie']
+for d in L:
+    print(d)
+print('Done.')
+print()
+
+## For-each version of a for-loop
+L = ['Huey', 'Dewey', 'Louie']
+for d in L:
+    print(d, end="---")
+print()   # or print("\")
+print('Done.')
+print()
+
+N = [23, 24, 25, 26]
+print(N[0],N[1],N[2],N[3], sep="***")
+
+## For-each version of a for-loop
+L = ['Huey', 'Dewey', 'Louie']
+for d in L:
+    print(d)
+    d = 'Duck ' + d
+    # Trying to change items in the list L; doesn't work.
+print(L, 'Done.')
+print()
+
+## For-loop with control variable as a number/index,
+##    as an item in a range.
+# Used when we want actual numbers, either themselves:
+for d in range(len(L)):
+    print("Duck No.", d+1, ".  ",L[d])
+print('Done.')
+print()
+
+# Or as subscripts/indexes
+for d in range(len(L)):
+    L[d] = "Mr. " + L[d]
+print(L, 'Done.')
+print()
+
+## WHILE loops:  For repeating an indefinite number of times.
+n = 0
+while n < len(L):
+    print(L[n], 'is a cool duck.')
+    n = n + 1
+print('Done.')
+print()
+"""
+SYNTAX
+    while BOOLEAN-EXPRESSION:
+        STATEMENT(S) --- Body of loop
+    next statement after loop (unindented)
+
+SEMANTICS
+    Evaluate Boolean Expression
+    If false, don't do the body; go on to the next statement.
+    If true, DO the body.  Then repeat ...
+    Evaluate the B.E. again ... and so on.
+"""
+
+## ONE COMMON PATTERN WITH WHILE LOOPS:  "N and a half times loop"
+"""
+Pattern:
+
+    while True:
+        Do first part of task.
+        if we're-ready-to-bail-out [Boolean Expression]:
+            break     # This takes us out of this loop, to next stmt.
+        Do the rest of the task
+    Next statement.
+
+
+
+"""
+################################################################
+
+## Developing the Restaurants program (11:00 version)
+
+"""
+One way to partition/organize the project:
+    Model:  How the program "thinks" about things internally.
+        Here, a Restaurant namedtuple and a list of Restaurants.
+        Usually stays same, no matter platform (phone, tablet, ...)
+    View:  How the program appears to the user.  (User Interface)
+        Text-oriented, conversational, menu-driven.
+
+We'll start with the view; it's quicker gratification.
+
+"""
+def restaurants():
+    ''' Main program [controller].  Create and maintain
+        a database of restaurants.
+    '''
+    print('Welcome to the restaurants program!')
+    print()
+    our_rests = [ ]  # Start with an empty collection.
+    our_rests = handle_commands(our_rests)
+    # Eventually we'll modify this program to write the
+    # list of restaurants out to a file (and read it back in later).
+
+    print()
+    print("Thank you.  Good-bye.")
+    return
+
+def handle_commands(L: 'list') -> 'list':
+    ''' Handle the commands '''
+    pass  # This definition is called a PROGRAM STUB
+"""
+def handle_commands(L: [Restaurant]) -> [Restaurant]:
+    ''' Handle the commands '''
+    pass  # This definition is called a PROGRAM STUB
+"""
+def handle_commands(L: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Handle the commands '''
+    pass  # This definition is called a PROGRAM STUB
+
+MENU = """
+Restaurant Collection Program --- Choose one
+ a:  Add a new restaurant to the collection
+ r:  Remove a restaurant from the collection
+ s:  Search the collection for selected restaurants
+ p:  Print all the restaurants
+ q:  Quit
+"""
+def handle_commands(RC: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Print menu, get response, do the right thing '''
+    while True:
+        command = input(MENU)
+        if command == 'q':
+            break   # User wants to quit; break out of loop.
+        else:
+            print("You typed '", command, "'.", sep="")
+
+    return RC
+
+def handle_commands(RC: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Print menu, get response, do the right thing '''
+    while True:
+        command = input(MENU)
+        if command == 'q':
+            break   # User wants to quit; break out of loop.
+        else:
+            if command == 'a':
+                print("You want to add a new restaurant")
+            else:
+                if command == 'r':
+                    print("You want to remove a restaurant")
+                else:
+                    if command == 's':
+                        print("You want to search for a restaurant")
+                    else:
+                        if command == 'p':
+                            print("You want to print the restaurants")
+                        else:
+                            print("You typed '", command, "'.  ",
+                                  "That isn't a valid command.  ",
+                                  "Please try again.", sep="")
+    return RC
+"""
+The code above works.  But it's kind of clunky, with all its ifs
+and elses, and the questions straggle diagonally down the page.
+There's a cleaner syntax for this kind of question, no-well-is-it-THIS,
+no-well-is-it-THAT, no-well-is-it-the-other pattern.
+As soon as you get an answer, you're done.
+Often in classifying kinds of situations.
+"""
+
+
+def handle_commands(RC: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Print menu, get response, do the right thing '''
+    while True:
+        command = input(MENU)
+        if command == 'q':
+            break   # User wants to quit; break out of loop.
+        elif command == 'a':
+            print("You want to add a new restaurant")
+        elif command == 'r':
+            print("You want to remove a restaurant")
+        elif command == 's':
+            print("You want to search for a restaurant")
+        elif command == 'p':
+            print("You want to print the restaurants")
+        else:
+            print("You typed '", command, "'.  ",
+            "That isn't a valid command.  ",
+            "Please try again.", sep="")
+
+    return RC
+
+## MODEL PART OF THE PROGRAM
+from collections import namedtuple
+Restaurant = namedtuple('Restaurant', 'name cuisine phone dish price')
+
+## START EVERYTHING UP
+restaurants()
+
+"""
+Example of lines ending in colon, expecting indentation:
+
+def double(n):
+if a == b:
+for i in L:
+"""
