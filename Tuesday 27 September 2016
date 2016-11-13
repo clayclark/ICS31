@@ -1,0 +1,75 @@
+# ICS 31, Tuesday 27 September 2016, 11am
+
+print("Hello!  Welcome to ICS 31!")
+
+hours = 40     # Assignment statement
+rate = 10
+salary = hours * rate
+print("Salary is $", salary)
+
+print(salary + rate)
+print("Hello" + "There")        # For strings, + is CONCATENATION
+
+print("Salary is $" + str(salary))
+
+# print("Salary is $" + salary)
+
+##Often you have a lot to say
+##in a comment, and it needs to
+##stretch over many lines.
+
+17
+
+-23.59
+
+"23 skiddoo"
+hours * rate
+
+
+"""
+Four score and seven years ago,
+our fathers brought forth upon
+this continent a new nation, ...
+"""
+print("Today we're goin' fishin'.")
+print('He said, "Hi, how are you?"')
+print('Today we\'re goin\' fishin\'.')
+print("Here is a backslash: \\")
+# The backslash character ESCAPES the internal apostrophes (treats them
+# like data, not like string delimiters.
+ 
+# print('Today we're goin' fishin'.')
+print("Salary is $")
+print(salary)
+print()
+print()
+
+"""
+When we write software, we're modeling the real world.
+
+The real world has:
+    Things (nouns):  objects
+    Actions (verbs):  operators, statements, functions, methods
+
+Any programming language gives us some selection of these
+    and a way to combine them.
+"""
+
+## Compute the total bill in a restaurant, with tax and tip,
+##   given the base amount of the bill.
+
+
+print("Hello.  What's your name?")
+user_name = input()
+print("Hello,", user_name, ".  What's the base amount of the bill?")
+base_amount = float(input())
+# base_amount = input()
+# print(type(base_amount))
+TAX_RATE = 0.08
+print("I will compute the overall total on $", base_amount, 'with tax and tip.')
+print("What percentage tip would you like to leave?  (15, 18, 20, ...)")
+tip_rate = float(input())
+print("Leaving", tip_rate, "% tip.")
+tax_amount = base_amount * TAX_RATE
+tip_amount = base_amount * (tip_rate / 100)
+print("The total to pay is $", base_amount + tax_amount + tip_amount, ".")
