@@ -1,0 +1,123 @@
+# ICS 31, Tuesday 1 November 2016, 11am class
+
+"""
+We learn new features in a programming language:
+    Some of them let you solve whole new categories of problem.  E.g., lists
+    Some of them just let you do the same thing more conveniently
+
+        i = 0
+        while i < 10:
+            BODY-OF-LOOP
+            i += 1
+
+    There's a more convenient syntax using for:
+
+        for i in range(10):
+            BODY-OF-LOOP
+
+    The for-loop doesn't let us do anythig new.  It's just SYNTACTIC SUGAR
+
+Today, FILES.  They let us do a whole new category of task.
+    Files give us PERSISTENCE (data sticks around between runs of our pgm)
+    We read from files.
+    We write data to files.
+
+    Files come in a variety of different formats:
+        .doc   .docx    .xls   .py    .pdf   .jpg   .mpg
+        We're going to be looking at PLAIN TEXT ("ASCII") files:   .txt
+            ASCII is the standard correspondence between
+            BITS ("binary digits") in memory and characters/keystrokes.
+            11001111 might be the code for "?".
+        File:  a document.
+        Directory:  a folder containing documents and files (other directories)
+        File system:  All the files/directories on a disk or computer.
+        We're going to deal with reading and writing files that are in
+            the same folder as our .py file.
+
+Three basic steps for file I/O (input/output):
+1.  OPEN THE FILE
+    Like dialing the phone.  Asks the operating system to connect your
+    program with the physical file on the disk.
+    Choose:  Open for reading OR open for writing.
+    You only open a file once.  Don't open an already-open file.  Don't
+        call open() in a loop [unless you have multiple files].
+2.  READ DATA from the file / WRITE DATA to the file
+3.  CLOSE THE FILE
+    Like hanging up the phone.  Just do this once per file, after you're
+    done reading or writing.
+
+"""
+
+my_input_file = open('gettysburg.txt', 'r')
+data = my_input_file.read()  # Read all text in file into one string
+print(data)
+print(data.split("\n"))
+print()
+print(my_input_file)  # Nothing all that useful
+my_input_file.close()
+
+## NOTE:  In real programs, we read data from a file just once.
+## Once it's in our program (in a string, a list, whatever), we can
+## process it however we want, however many times.  But we don't close
+## a file then re-open it to re-read its contents because it takes 1000
+## times longer to read from a file than to get the data from a list, say,
+## that's already in memory.
+## (Here we don't have a real program, just a series of runnable examples.)
+
+"""
+Four ways to read text data from files:
+
+1.  read() method.  Reads the whole file into one big string.
+    Advantage:  simple.
+    Disadvantage:  (a) You have to do all the processing on the one big
+        string by yourself.  Other methods do some of the work for you.
+        (b) A really huge file might not fit into memory all at once
+        (so you'd have to read and process it chunk by chunk).
+
+1a. read(n):  Read the next n characters from the input.
+       The operating system keeps a "file pointer", like your finger on
+       the page to mark your place, so that the next time you read from
+       the same file you start where you left off (instead of back at the
+       beginning).
+       Most useful for data written in tabular form:
+           Escargots           23.50   495 ***:Joe  Great:Ann  Cool!:Sam
+           Blanc de veau       45.00   650
+           Oeufs a la neige     9.45   900
+
+           name = infile.read(20).strip()
+           price = float(infile.read(5))
+           calories = int(infile.read(6))
+           comments = readline() # Read the rest of the line
+
+"""
+infile = open('gettysburg.txt', 'r')
+line = infile.readline()
+print('-->' + line + '<--')
+infile.close()
+
+"""
+2.  readline() method.  Read everything from the current position to the
+        nest \n (or to the end of the file, "EOF"), return what's read.
+        If there's nothing left to read, return the empty string.
+        Useful for reading huge files line by line, or any time you need to
+            read a line
+            process it
+            repeat
+
+3.  readlines() method.  Read all the lines in the file into a list of
+        strings.  We did this above with read() and split("\n").
+
+4.  for a_line in my_input_file:
+        # Do whatever you want with the variable a_line
+    So, e.g., you can copy a file line by line.
+"""
+
+print()
+# Open both files:
+infile = open('gettysburg.txt', 'r')
+outfile = open('copy.txt', 'w')
+for line in infile:
+    outfile.write(line)
+infile.close()
+outfile.close()
+print('Done with copy.')
