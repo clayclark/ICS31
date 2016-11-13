@@ -1,0 +1,140 @@
+# ICS 31, Thursday 6 October 2016, 11am
+
+"""
+Programming languages are EXTENSIBLE:
+    Things/nouns/objects:  Extend with namedtuples.
+    Actions/verbs:  Programmer-defined functions like double()
+        Defining functions:  Follow the DESIGN RECIPE.
+        The TAs and tutors will expect you to have the steps done.
+Functions are a complexity-management feature; they give our code
+    MODULARITY.
+
+Cookbooks:  A chocolate cake recipe ... says Use the Chocolate Icing
+    recipe on page 23:
+    -- Keeps both recipes simpler, with single focus
+    -- Easier to modify, easier to focus on places where changes are
+        necessary
+    -- Is reusable:  Different cakes can use Chocolate Icing,
+        with just one copy of icing recipe.
+        AVOIDS DUPLICATE CODE.
+    -- Is interchangeable:  Can have multiple icing recipies, swap
+        them in and out for various cakes.
+
+    PARAMETERS help us avoid duplicate code.
+    FLAVORED ICING:  Take the flavoring, a cup of sugar, a cup of
+        butter, mix until smooth.
+        Use the Flavored Icing recipe with a cup of chocolate
+        Use the Flavored Icing recipe with a cup of lemon juice ...
+        "THE FLAVORING" in the definition of the recipe---
+            that's the parameter name (like n in double()).
+
+Things/nouns/objects.
+    Single-valued, multiple-valued (str, lists, namedtuples)
+Actions/verbs:
+    Statements
+    Operators
+    Functions (predefined, programmer-defined):  MODULARITY
+    Methods (predefined, programmer-defined):    MODULARITY
+
+    Combining actions:
+        Operators combine into nested expressions:  12 * (double(x) + 1)
+        Statements can be combined in a few ways:
+            Changing the FLOW OF CONTROL, using CONTROL STRUCTURES
+
+            SEQUENCE:  One statement after another.
+            MODULARITY: Call a function (execute its body) and return.
+            SELECTION:  Choose different statements depending on the
+                answer to a yes-or-no question.  IF statements.
+            REPETITION:  Do the same code more than once.
+                Called "loops".  FOR statements/FOR-loops, WHILE loops
+"""
+
+temperature = 55
+print("Here's what to wear today:")
+if temperature < 60:
+    print("a sweater, because the temperature is", temperature, "degrees.")
+print("Have a good day.")
+
+"""
+The IF statement: (version 1)
+    Syntax
+        if BOOLEAN-EXPRESSION:
+            STATEMENT(S)
+
+    Semantics
+        Evaluate the B.E.  (True or False)
+        If it's true, do the indented statements (the "body")
+        If it's false, skip the body, don't do anything special.
+        In either case, go on to the next (unindented) statement.
+"""
+print()
+temperature = 85
+print("Here's what to wear today:")
+if temperature < 60:
+    print("a sweater")
+else:
+    print("a T-shirt")
+print("Have a good day.")
+
+"""
+The IF statement: (version 2)
+    Syntax
+        if BOOLEAN-EXPRESSION:
+            STATEMENT(S)
+        else:
+            STATEMENT(S)
+
+    Semantics
+        Evaluate the B.E.  (True or False)
+        If it's true, do the indented statements under "if"
+            and skip the statement(s) under "else"
+        If it's false, skip the statements under "if" and
+            do the statements under "else"
+        In either case, go on to the next (unindented) statement.
+"""
+
+temperatures = [85, 80, 79, 84, 92, 80, 78]
+print("The last week's high temperatures:")
+print(temperatures)
+print("Pretty warm, huh?")
+print()
+
+print("The last week's high temperatures:")
+for t in temperatures:
+    print(t, "degrees")
+print("Pretty warm, huh?")
+print()
+
+"""
+For loop ("for-each" version)
+    Syntax
+        for VARIABLE in COLLECTION/SEQUENCE:
+            STATEMENT(S)   The "body" of the loop
+    Semantics
+        set VARIABLE to first item in COLLECTION/SEQUENCE
+        do the body (using the variable as appropriate)
+        set VARIABLE to second item in COLLECTION/SEQUENCE
+        do the body (using the variable as appropriate)
+        set VARIABLE to third ...
+        Keep repeating until you've processed each item in
+            the COLLECTION/SEQUENCE (could even be zero times)
+"""
+print("The last week's high temperatures:")
+for t in temperatures:
+    print(t, "degrees")
+    print("Pretty warm, huh?")
+print()
+
+print("The last week's high temperatures:")
+for t in temperatures:
+    print(t, "degrees")
+    if t >= 80:
+        print("Pretty warm, huh?")
+    else:
+        print("Comfortable enough")
+print("Bye-bye")
+print()
+
+for c in "Hello, there!":
+    print("Next character is '" + c + "'.")
+#######
