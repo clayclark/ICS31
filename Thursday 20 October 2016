@@ -1,0 +1,221 @@
+# ICS 31, Thursday 20 October 2016, 11am
+
+"""
+Mutability/Immutability
+
+A data type that's MUTABLE (like lists) can be changed IN PLACE; don't
+have to make a copy to change its values
+A data type that's IMMUTABLE (like strings and namedtuples) can't be
+changed in place; you have to make a copy.
+"""
+
+L = ["Huey", "Dewey", "Louie", "Donald", "Daisy", "Scrooge"]
+print('original:', L)
+L.sort()
+print('sorted:', L)
+print()
+
+L = ["Huey", "Dewey", "Louie", "Donald", "Daisy", "Scrooge"]
+print('original:', L)
+# M = sorted(L)
+# print('sorted:', M)
+print(sorted(L))
+print('L is unchanged:', L)
+print()
+## Of course, you can reassign L explicitly:
+L = sorted(L)
+## Now L is in order.
+
+s = "Trick or Treat"
+# s[1] = "Hello"  # Error, because strings are IMMUTABLE; can't change in place
+s = s[0] + "Hello" + s[2:]
+# s.sort()  # ERROR:  No sort() method for strings.
+print(s)
+print(sorted(s))
+
+"""
+EFFICIENCY:  Covers a whole lot of ground.
+    Human efficiency:
+        End users (HCI, Human-Computer Interaction)
+        Developer/programmer:  Develop sooner, be first to market.
+            (Software Engineering)
+        *** People time is more expensive than computer time (today)
+    Machine efficiency:  Make effective use of COMPUTATIONAL RESOURCES
+        Processor time
+        Memory (RAM) usage
+        Secondary storage (disks, SSDs) usage
+        Input/output, network traffic
+        Power ('cause a lot of things are battery-powered)
+"""
+"""
+What happens when we pass (mutable, immutable) objects
+    as parameters to a function?
+The behavior varies, depending on whether the parameter is
+    mutable or immutable and on what we do with it in the function.
+"""
+
+def add_to_end(s: str, i: str) -> str:
+    ''' Return the string with i appended to it. '''
+    s = s + i
+    return s
+
+name = "Donald"
+print(name)
+print(add_to_end(name, " Duck"))
+print("unchanged name:", name)
+print()
+
+"""
+The above version makes a copy of the argument automatically,
+so it doesn't change the argument back in the calling program.
+That's called PASSING A PARAMETER BY VALUE, and it has no side effects
+"""
+
+
+def add_to_end(L: list, i: 'Anything') -> list:
+    ''' Return the list with i appended to it. '''
+    L.append(i)
+    return L
+
+original = [23, 45, 67, 89]
+print("original:", original)
+print(add_to_end(original, 999))
+print("value of original:", original)
+print()
+
+"""
+The above version uses a link to the original argument, rather than
+making a copy, so any changes to the parameter L are also made to
+the corresponding argument, original.
+That's called PASSING A PARAMETER BY REFERENCE, and it does have
+a side effect.
+"""
+def add_to_end(L: list, i: 'Anything') -> list:
+    ''' Return the list with i appended to it. '''
+    L = L + [i]  # New list, expr makes a copy, no side effect
+    return L
+
+original = [23, 45, 67, 89]
+print("original:", original)
+print(add_to_end(original, 999))
+print("value of original:", original)
+print()
+
+# No side effect here; assignment stmt makes a copy
+def add_to_end(L: list, i: 'Anything') -> list:
+    ''' Return the list with i appended to it. '''
+    # L += [i]
+    # return L l    # Gives a side effect; += operates on original
+
+original = [23, 45, 67, 89]
+print("original:", original)
+print(add_to_end(original, 999))
+print("value of original:", original)
+print()
+## Below is a more complete set of examples
+
+def add_to_end(s: str, i: str) -> str:
+   ''' Return a string with i appended to s
+   '''
+   s = s + i
+   return s
+assert add_to_end("Hello", "!!") == 'Hello!!'
+assert add_to_end("", "Monkey") == "Monkey"
+assert add_to_end("Monkey", "") == "Monkey"
+assert add_to_end("", "") == ""
+
+name = 'Donald'
+print(name)
+print(add_to_end(name, " Duck"))
+print(name)
+"""
+The variable 'name' is unchanged; passing the parameter BY VALUE
+   (making a copy)
+
+Now, what if the parameter is MUTABLE?
+"""
+def add_to_end(L: list, i: 'Anything') -> list:
+   ''' Return a list with i appended to L
+   '''
+   L.append(i) # This changes the corresponding argument:  a SIDE EFFECT
+   return L
+assert add_to_end([1,2,3], 4) == [1,2,3,4]
+
+print()
+original = [23, 45, 67, 89]
+print(original)
+print(add_to_end(original, 999))
+print(original)
+
+def add_to_end(L: list, i: 'Anything') -> list:
+   ''' Return a list with i appended to L
+   '''
+   result = L
+   result.append(i) # This changes the corresponding argument:  a SIDE EFFECT
+   return result
+assert add_to_end([1,2,3], 4) == [1,2,3,4]
+
+print()
+original = [23, 45, 67, 89]
+print(original)
+print(add_to_end(original, 999))
+print(original)
+
+def add_to_end(L: list, i: 'Anything') -> list:
+   ''' Return a list with i appended to L
+   '''
+   result = L[:]     # Make a copy of the whole list
+   result.append(i)
+   return result
+assert add_to_end([1,2,3], 4) == [1,2,3,4]
+
+print()
+original = [23, 45, 67, 89]
+print(original)
+print(add_to_end(original, 999))
+print(original)
+
+def add_to_end(L: list, i: 'Anything') -> list:
+   ''' Return a list with i appended to L
+   '''
+   L.extend([i]) # This changes the corresponding argument:  a SIDE EFFECT
+   return L
+assert add_to_end([1,2,3], 4) == [1,2,3,4]
+
+print()
+original = [23, 45, 67, 89]
+print(original)
+print(add_to_end(original, 999))
+print(original)
+
+def add_to_end(L: list, i: 'Anything') -> list:
+   ''' Return a list with i appended to L
+   '''
+   L = L + [i]  # Creates a new list, so no side effect.
+   return L
+assert add_to_end([1,2,3], 4) == [1,2,3,4]
+
+print()
+original = [23, 45, 67, 89]
+print(original)
+print(add_to_end(original, 999))
+print(original)
+
+a = 5
+a += 1  # like a = a + 1  -- "Add 1 to a"
+# This form of statement, add 1 to something, is the most common.
+# Donald E. Knuth (Stanford), America's most famous computer scientist.
+print(a)
+
+def add_to_end(L: list, i: 'Anything') -> list:
+   ''' Return a list with i appended to L
+   '''
+   L += [i]
+   return L
+assert add_to_end([1,2,3], 4) == [1,2,3,4]
+
+print()
+original = [23, 45, 67, 89]
+print(original)
+print(add_to_end(original, 999))
+print(original)
