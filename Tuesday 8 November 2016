@@ -1,0 +1,296 @@
+# ICS 31, Tuesday 8 November 2016, 11am class
+
+##
+## ICStunes:  A Music Manager
+##
+
+from collections import namedtuple
+#######################################
+# Album, Song
+#######################################
+
+Album = namedtuple('Album', 'id artist title year songs')
+# id is a unique ID number; artist and title are strings; year is a number,
+#   the year the song was released; songs is a list of Songs
+
+Song = namedtuple('Song', 'track title length play_count')
+# track is the track number; title is a string; length is the number of
+#   seconds long the song is; play_count is the number of times the user
+#   has listened to the song
+
+MUSIC = [
+    Album(1, "Peter Gabriel", "Up", 2002,
+        [Song(1, "Darkness", 411, 5),
+         Song(2, "Growing Up", 453, 5),
+         Song(3, "Sky Blue", 397, 2),
+         Song(4, "No Way Out", 473, 2),
+         Song(5, "I Grieve", 444, 2),
+         Song(6, "The Barry Williams Show", 735, 1),
+         Song(7, "My Head Sounds Like That", 389, 1),
+         Song(8, "More Than This", 362, 1),
+         Song(9, "Signal to Noise", 456, 2),
+         Song(10, "The Drop", 179, 1)]),
+    Album(2, "Simple Minds", "Once Upon a Time", 1985,
+        [Song(1, "Once Upon a Time", 345, 9),
+         Song(2, "All the Things She Said", 256, 10),
+         Song(3, "Ghost Dancing", 285, 7),
+         Song(4, "Alive and Kicking", 326, 26),
+         Song(5, "Oh Jungleland", 314, 13),
+         Song(6, "I Wish You Were Here", 282, 12),
+         Song(7, "Sanctify Yourself", 297, 7),
+         Song(8, "Come a Long Way", 307, 5)]),
+    Album(3, "The Postal Service", "Give Up", 2003,
+        [Song(1, "The District Sleeps Alone", 284, 13),
+         Song(2, "Such Great Heights", 266, 13),
+         Song(3, "Sleeping In", 261, 12),
+         Song(4, "Nothing Better", 226, 18),
+         Song(5, "Recycled Air", 269, 13),
+         Song(6, "Clark Gable", 294, 12),
+         Song(7, "We Will Become Silhouettes", 300, 11),
+         Song(8, "This Place is a Prison", 234, 9),
+         Song(9, "Brand New Colony", 252, 9),
+         Song(10, "Natural Anthem", 307, 7)]),
+    Album(4, "Midnight Oil", "Blue Sky Mining", 1989,
+        [Song(1, "Blue Sky Mine", 258, 12),
+         Song(2, "Stars of Warburton", 294, 11),
+         Song(3, "Bedlam Bridge", 266, 11),
+         Song(4, "Forgotten Years", 266, 8),
+         Song(5, "Mountains of Burma", 296, 9),
+         Song(6, "King of the Mountain", 231, 8),
+         Song(7, "River Runs Red", 322, 9),
+         Song(8, "Shakers and Movers", 268, 9),
+         Song(9, "One Country", 353, 7),
+         Song(10, "Antarctica", 258, 6)]),
+    Album(5, "The Rolling Stones", "Let It Bleed", 1969,
+        [Song(1, "Gimme Shelter", 272, 3),
+         Song(2, "Love In Vain", 259, 2),
+         Song(3, "Country Honk", 187, 0),
+         Song(4, "Live With Me", 213, 2),
+         Song(5, "Let It Bleed", 327, 2),
+         Song(6, "Midnight Rambler", 412, 1),
+         Song(7, "You Got the Silver", 170, 0),
+         Song(8, "Monkey Man", 251, 13),
+         Song(9, "You Can't Always Get What You Want", 448, 10)])
+]
+# print(MUSIC)
+
+def Song_print(s: Song) -> None:
+    ''' Print a Song readably '''
+    print("    ", s.track, s.title, s.length, s.play_count, sep="---")
+    return
+# Song_print(Song(8, "Monkey Man", 251, 13))
+
+def Album_print(a: Album) -> None:
+    ''' Print an Album readably '''
+    print(a.id, a.artist, a.title, a.year, sep=" / ")
+    for s in a.songs:
+        Song_print(s)
+    return
+# Album_print(MUSIC[1])
+
+def Collection_print(C: 'list of Album') -> None:
+    ''' Print a music collection readably '''
+    for a in C:
+        Album_print(a)
+        print()
+    return
+Collection_print(MUSIC)
+
+## Say we want to sort the collection by release year, oldest first.
+## We know we can't say    MUSIC.sort(key=year)
+
+def Album_year(a: Album) -> int:
+    ''' Return the year the album was released '''
+    return a.year
+
+print("\nAlbums in order by year, oldest first:\n")
+MUSIC.sort(key=Album_year)
+Collection_print(MUSIC)
+
+
+print("\nAlbums in order by year, newest first:\n")
+MUSIC.sort(key=Album_year,reverse=True)
+Collection_print(MUSIC)
+
+## By title, now.
+
+def Album_title(a: Album) -> str:
+    ''' Return the title of the album'''
+    return a.title
+
+print("\nAlbums in order by title:\n")
+MUSIC.sort(key=Album_title)
+Collection_print(MUSIC)
+
+## There's a repetitive pattern here.
+## That's DUPLICATE CODE, which is bad.  We want to avoid it.
+## Can we capture the commonalities?
+
+def Collection_sort(C: 'list of Album',
+                    keyfunction: 'function on Album') -> None:
+    ''' Reorder the collection by comparing the values that
+        the keyfunction parameter returns '''
+    C.sort(key=keyfunction)
+    return
+
+MUSIC.sort()   # Put it back in the original order
+print("\n\nORIGINAL:\n")
+Collection_print(MUSIC)
+
+Collection_sort(MUSIC, Album_year)
+print("\n\nORDERED BY RELEASE DATE:\n")
+Collection_print(MUSIC)
+
+Collection_sort(MUSIC, Album_title)
+print("\n\nORDERED BY TITLE:\n")
+Collection_print(MUSIC)
+
+## Functions can be parameters, just as strings or lists can.
+## Functions are FIRST-CLASS OBJECTS in Python.  It's another data
+## type, just like the others.
+
+## Another way we can sort:  by total length (in seconds) of the album.
+
+def Album_length(a: Album) -> int:
+    ''' Return the total number of seconds of all songs on the album '''
+    total = 0
+    for s in a.songs:
+        total += s.length
+    return total
+
+Collection_sort(MUSIC, Album_length)
+print("\n\nORDERED BY TOTAL PLAYING TIME:\n")
+Collection_print(MUSIC)
+for a in MUSIC:
+    print(a.title, Album_length(a))
+
+## All the songs (from whatever album) that have been played N+ times
+"""
+One approach:
+
+    for each album:
+        for each song:
+            if song's play count >= n
+                append this song to the result
+    result is list of songs played N+ times
+
+    This form of coding is called PSEUDOCODE.
+"""
+
+def popular_songs(C: 'list of Album', N: int) -> 'list of Song':
+    ''' Return a list of all songs played N or more times '''
+    result = []
+    for a in C:
+        for s in a.songs:
+            if s.play_count >= N:
+                result.append(s)
+    return result
+
+print()
+pop = popular_songs(MUSIC, 10)
+for s in pop:
+    Song_print(s)
+
+## But we don't have album information for these songs.
+
+"""
+One approach:  Store album information with each song:
+
+Song1:  ID, title, length, play_count, album_title, album_artist, album_year
+Song2:  ID, title, length, play_count, album_title, album_artist, album_year
+Song3:  ID, title, length, play_count, album_title, album_artist, album_year
+...
+
+This is DUPLICATE DATA, the evil cousin of duplicate code.
+It's wasteful but worse, it's error-prone.  Can have inconsistencies
+
+Another approach:
+
+    Keep the Album info hierarchical:
+        Album 1
+            Song 1
+            Song 2
+            Song 3
+        Album 2
+            Song 1
+            Song 2
+    But we'll process it differently.
+    When we need to display a song's info,
+        we can collect the album's info at that point.
+    We'll create a temporary data structure called a Songdisplay.
+        It contains the song info plus that song's album info.
+    As we identify the songs we want to gather, we cdreate a
+        Songdisplay for it and add it to the result.
+    Then we do whatever we want with that list of Songdisplays
+        (like print it) and toss them out when we're done
+        (because we still have all the info in the original
+        music collection).
+"""
+Songdisplay = namedtuple('Songdisplay',
+              'songtitle length play_count artist albumtitle year')
+
+def Songdisplay_print(sd: Songdisplay) -> None:
+    ''' Print a Songdisplay readably '''
+    print(sd.songtitle, sd.length, sd.play_count, sd.artist,
+          sd.albumtitle, sd.year, sep=" ** ")
+    return
+
+def popular_songs(C: 'list of Album', N: int) -> 'list of Song':
+    ''' Return a list of all songs played N or more times
+        in Songdisplay form '''
+    result = []
+    for a in C:
+        for s in a.songs:
+            if s.play_count >= N:
+                sd = Songdisplay(s.title, s.length, s.play_count,
+                                 a.artist, a.title, a.year)
+                result.append(sd)
+    return result
+
+print()
+pop = popular_songs(MUSIC, 10)
+for s in pop:
+    Songdisplay_print(s)
+# Now we have all the info we want to see
+
+"""
+We could print the info in evenly aligned columns.
+USe fixed field widths with format()
+
+Write the collection to a file and read it back again.
+
+File format:
+    Number of albums   [f.write(len(C))]
+    Album 1 info (separated by tabs)   [ read with a for-loop ]
+    Number of songs in Album 1
+    Song 1 in Album 1 info
+    Song 2 in Album 1 info
+    Song 3 in Album 1 info
+    Album 2 info
+    Num songs Album 2
+    Song 1 Album 2
+    Song 2 Album 2
+    ...
+
+Writing a collecdtion to this kind of file:
+    Write number of albums
+    for each album in collection:
+        Write ID, Artist, Title, Year (tab-separated)
+        write len(album.songs)
+        for each song in album.songs:
+            write track, title, length, play_count (tab-sep)
+
+Readinga collection from this kind of file:
+    read number of albums
+    collection = []
+    for a in range(number of albums):
+        read album ID, artist, title, year and split.
+        read number of songs
+        songlist - []
+        for s in range (number of songs)
+            read track, title, length, playcount
+            songlist.append(Song(track, title, length, playcount))
+        newalbum = Album(...)
+        colection.append(newalbum)
+
+"""
