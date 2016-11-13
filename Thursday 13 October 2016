@@ -1,0 +1,264 @@
+## Developing the Restaurants program (11:00 version)
+
+"""
+One way to partition/organize the project:
+    Model:  How the program "thinks" about things internally.
+        Here, a Restaurant namedtuple and a list of Restaurants.
+        Usually stays same, no matter platform (phone, tablet, ...)
+    View:  How the program appears to the user.  (User Interface)
+        Text-oriented, conversational, menu-driven.
+
+We'll start with the view; it's quicker gratification.
+
+"""
+from collections import namedtuple # Customary to have imports at top
+def restaurants():
+    ''' Main program [controller].  Create and maintain
+        a database of restaurants.
+    '''
+    print('Welcome to the restaurants program!')
+    print()
+    our_rests = [ ]  # Start with an empty collection.
+    our_rests = handle_commands(our_rests)
+    # Eventually we'll modify this program to write the
+    # list of restaurants out to a file (and read it back in later).
+
+    print()
+    print("Thank you.  Good-bye.")
+    return
+
+def handle_commands(L: 'list') -> 'list':
+    ''' Handle the commands '''
+    pass  # This definition is called a PROGRAM STUB
+"""
+def handle_commands(L: [Restaurant]) -> [Restaurant]:
+    ''' Handle the commands '''
+    pass  # This definition is called a PROGRAM STUB
+"""
+def handle_commands(L: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Handle the commands '''
+    pass  # This definition is called a PROGRAM STUB
+
+MENU = """
+Restaurant Collection Program --- Choose one
+ a:  Add a new restaurant to the collection
+ r:  Remove a restaurant from the collection
+ s:  Search the collection for selected restaurants
+ p:  Print all the restaurants
+ q:  Quit
+"""
+def handle_commands(RC: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Print menu, get response, do the right thing '''
+    while True:
+        command = input(MENU)
+        if command == 'q':
+            break   # User wants to quit; break out of loop.
+        else:
+            print("You typed '", command, "'.", sep="")
+
+    return RC
+
+def handle_commands(RC: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Print menu, get response, do the right thing '''
+    while True:
+        command = input(MENU)
+        if command == 'q':
+            break   # User wants to quit; break out of loop.
+        else:
+            if command == 'a':
+                print("You want to add a new restaurant")
+            else:
+                if command == 'r':
+                    print("You want to remove a restaurant")
+                else:
+                    if command == 's':
+                        print("You want to search for a restaurant")
+                    else:
+                        if command == 'p':
+                            print("You want to print the restaurants")
+                        else:
+                            print("You typed '", command, "'.  ",
+                                  "That isn't a valid command.  ",
+                                  "Please try again.", sep="")
+    return RC
+"""
+The code above works.  But it's kind of clunky, with all its ifs
+and elses, and the questions straggle diagonally down the page.
+There's a cleaner syntax for this kind of question, no-well-is-it-THIS,
+no-well-is-it-THAT, no-well-is-it-the-other pattern.
+As soon as you get an answer, you're done.
+Often in classifying kinds of situations.
+"""
+
+
+def handle_commands(RC: 'list of Restaurant') -> 'list of Restaurant':
+    ''' Print menu, get response, do the right thing '''
+    while True:
+        command = input(MENU)
+        if command == 'q':
+            break   # User wants to quit; break out of loop.
+        elif command == 'a':
+            # print("You want to add a new restaurant")
+            new_rest = Restaurant_get_info()
+            RC = Collection_add(RC, new_rest)
+            # print("Add", new_rest.name, "to the database.")
+        elif command == 'r':
+            # print("You want to remove a restaurant")
+            name_to_remove = input("Please enter the name of the " +
+                                 "restaurant to remove:  ")
+            RC = Collection_remove_by_name(RC, name_to_remove)
+        elif command == 's':
+            #print("You want to search for a restaurant")
+            name_to_find = input("Please enter the name of the " +
+                                 "restaurant to search for:  ")
+            print(Collection_to_str(Collection_search_by_name(RC, name_to_find)))
+        elif command == 'p':
+            # print("You want to print the restaurants")
+            print(Collection_to_str(RC))
+        else:
+            print("You typed '", command, "'.  ",
+            "That isn't a valid command.  ",
+            "Please try again.", sep="")
+
+    return RC
+
+## MODEL PART OF THE PROGRAM
+
+## RESTAURANTS
+
+Restaurant = namedtuple('Restaurant', 'name cuisine phone dish price')
+# Create a few restaurants for testing
+R1 = Restaurant('Taillevent', 'French', '01-22-33-44-55',
+                'Escargots', 45.55)
+R2 = Restaurant('Thai Dishes', 'Thai', '334-4433', 'Mee Krob', 8.95)
+R3 = Restaurant('Thai Touch', 'Thai', '444-3333', 'Larb Gai', 11.00)
+
+# print(R1)  # Kind of clunky, not user friendly
+
+def Restaurant_print(R: Restaurant) -> None:  # Just prints
+    ''' Print the Restaurant info in readable form '''
+    print("Name:     ", R.name)
+    print("Cuisine:  ", R.cuisine)
+    print("Phone:    ", R.phone)
+    print("Dish:     ", R.dish)
+    print("Price:     $", str(R.price), sep="")
+    return
+# Restaurant_print(R1)
+
+def Restaurant_to_str(R: Restaurant) -> str:
+    ''' Create a string with the restaurant info in readable form '''
+    return "Name:     " + R.name + "\n" + \
+        "Cuisine:  " + R.cuisine + "\n" + \
+        "Phone:    " + R.phone  + "\n" + \
+        "Dish:     " + R.dish  + "\n" + \
+        "Price:    $" + str(R.price) + "\n\n"
+
+def Restaurant_to_str(R: Restaurant) -> str:
+    ''' Create a string with the restaurant info in readable form '''
+    return ("Name:     " + R.name + "\n" +
+        "Cuisine:  " + R.cuisine + "\n" +
+        "Phone:    " + R.phone  + "\n" +
+        "Dish:     " + R.dish  + "\n" +
+        "Price:    $" + str(R.price) + "\n\n")
+
+# print(Restaurant_to_str(R1))
+
+def Restaurant_get_info() -> Restaurant:
+    ''' Return a Restaurant created from the user's responses '''
+    n = input("Please enter the restaurant's name:  ")
+    c = input("Please enter the kind of food served:  ")
+    ph = input("Please enter the phone number:  ")
+    d = input("Please enter the name of the best dish:  ")
+    p = input("Please enter the price of that dish:  ")
+    return Restaurant(n, c, ph, d, float(p))
+
+# R4 = Restaurant_get_info()
+# print(R4)
+# print(Restaurant_to_str(R4))
+"""
+print(1, 2, 3,
+      4, 5, 6)
+"""
+
+## COLLECTION
+# A collection of Restaurants is a list of Restaurant objects
+# We might decide to change that implementation later on; there are
+# lots of alternatives.  To make that easiest, we create a bunch of
+# functions that together have an API, Applications Programming Interface:
+# The names of the functions, their arguments' types, the return type,
+# and what the function does.  That limits what the caller of these
+# functions needs to know. ("Information Hiding")
+
+TRC = [R1, R2, R3]  # "Test Restaurant Collection
+
+def Collection_new() -> 'list of Restaurants':
+    ''' Create and return a new, empty, list '''
+    return [ ]
+assert Collection_new() == [ ]
+
+def Collection_add(C: 'list of Restaurant', r: Restaurant) -> 'list of Restaurants':
+    ''' Return the list with the new restaurant added at the end '''
+    C.append(r)
+    return C
+    # or  return C + [r]
+assert Collection_add(Collection_new(), R1) == [R1]
+assert Collection_add([R2, R3], R1) == [R2, R3, R1]
+
+def Collection_to_str(C: 'list of Restaurant') -> str:
+    ''' Return a string representing the whole collection'''
+    result = ""
+    for r in C:
+        result = result + Restaurant_to_str(r)
+    return result
+assert Collection_to_str(Collection_new()) == ""
+assert Collection_to_str(TRC) == \
+    Restaurant_to_str(R1) + Restaurant_to_str(R2) + Restaurant_to_str(R3)
+
+def Collection_search_by_name(C: 'list of Restaurant', looking_for: str) \
+    -> 'list of Restaurant':
+    ''' Return a collection containing those restaurants in the first arg.
+        that match the name you're looking for. '''
+    result = [ ]
+    for r in C:
+        if r.name == looking_for:
+            result.append(r)
+    return result
+assert Collection_search_by_name(TRC, "Taillevent") == [R1]
+assert Collection_search_by_name(TRC, "McDonald's") == []
+assert Collection_search_by_name([R2, R3, R2, R1], "Thai Dishes") == [R2,R2]
+
+def Collection_remove_by_name(C: 'list of Restaurant', to_remove: str) \
+    -> 'list of Restaurant':
+    ''' Return collection with the named restaurant(s) deleted '''
+    result = []
+    for r in C:
+        if r.name != to_remove:
+            result.append(r)
+    return result
+### Test cases:  Many configurations
+# Remove from the empty list [still empty]
+assert Collection_remove_by_name([], "Taillevent") == [ ]
+# Remove item not on list at all
+assert Collection_remove_by_name(TRC, "McDonald's") == TRC
+# Remmove item from list, result empty
+assert Collection_remove_by_name([R3], R3.name) == [ ]
+# Remove first item from list
+assert Collection_remove_by_name(TRC, "Taillevent") == [R2, R3]
+# Remove last item on list
+assert Collection_remove_by_name(TRC, "Thai Touch") == [R1, R2]
+# Remove from middle of list
+assert Collection_remove_by_name(TRC, "Thai Dishes") == [R1, R3]
+# Remove multiple occurrences of name
+assert Collection_remove_by_name([R3, R2, R3, R1, R3],
+                                 "Thai Touch") == [R2, R1]
+
+## START EVERYTHING UP
+restaurants()
+
+"""
+Example of lines ending in colon, expecting indentation:
+
+def double(n):
+if a == b:
+for i in L:
+"""
