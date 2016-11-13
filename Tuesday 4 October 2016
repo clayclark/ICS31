@@ -1,0 +1,100 @@
+# ICS 31, Tuesday 4 October 2016, 11am
+
+## NAMEDTUPLES
+from collections import namedtuple
+Student = namedtuple("Student", "name ID major GPA")
+s1 = Student("Peter Programmer", 33334444, "CSE", 3.25)
+s2 = Student("Andrea Anteater", 12122323, "CS", 3.55)
+s3 = Student("Andrew Anteater", 11112222, "ECON", 3.44)
+print("The name of the first student is", s1.name <http://s1.name/>, "and his or her major is",
+      s1.major, ".")
+ 
+L = [s2, s1, s3]
+print(L)
+print()
+## How do we sort them?
+# Q1:  What's the "sort key"---the basis for comparison?
+#       At this moment, we can only sort by the first field (name)
+# Q2:  Do we want to change the order of L, or just get a sorted copy and
+#       leave L alone?   (sort method vs sorted function)
+
+# To change L, use the L.sort() method
+L.sort()
+print(L)
+print("Above should be in order by name")
+print("The name of the first student in L is now", L[0].name)
+print()
+L = [s2, s1, s3]    # Put L back in the original order
+# Now, to sort but preserve L:
+print(L)
+print("Above is L in orignal order\n")
+M = sorted(L)
+print(M)
+print("Above is copy of L, in sorted order [by name, all we know at this point")
+print()
+print(L)
+print("Above is L, unchanged from before\n")
+print()
+
+"""
+There is a SYNTACTIC difference:
+    L.sort()
+    ... sorted(L) ...  [This returns a value, so it would be part of a larger statement
+    
+There's also a SEMANTIC difference:
+    sort() changes its object in place (a SIDE EFFECT)
+    sorted() leaves its argument unchanged and RETURNS a sorted copy of the argument    
+
+Programming languages are EXTENSIBLE:
+   Things:  Define new types of things, e.g., with namedtuples.
+   Actions:  Define new FUNCTIONS.
+
+"""
+
+def double(n: int) -> int:
+    ''' Return twice the value of the argument.
+    '''
+    return 2 * n
+assert double(0) == 0
+assert double(2) == 4
+assert double(-10) == -20
+assert double(224433) == 448866
+
+x = 13
+print(double(x))
+# Here x is the ARGUMENT -- the value the function is called with on the outside.
+# And n is called the PARAMETER---it's the name we use INSIDE the function for
+#    whatever comes down the spout.  The author of double() doesn't need to know
+#    about x, nor does the caller need to know about n.
+"""
+Syntax:
+
+def FUNCTIONNAME (NAME: TYPE) -> TYPE:
+   ''' Comment, one line describing what the function does
+   '''
+   STATEMENT(S) ---   "The BODY of the function"
+   return EXPRESSION
+assert BOOLEAN EXPRESSION
+...
+
+"""
+help(len)
+help(double)
+
+# Python only requires:
+def double_barebones(n):
+    return 2 * n
+# But your TA requires the whole thing above.
+
+def Student_ID(S: Student) -> int:
+    ''' Return the ID field of student S
+    '''
+    return S.ID <http://s.id/>
+assert Student_ID(s1) == 33334444
+assert Student_ID(s2) == 12122323
+
+print(L)
+print()
+L.sort(key=Student_ID)
+print(L)
+print()
