@@ -1,0 +1,28 @@
+# ICS 31 / CSE 41, Thursday 22 September 2016, 11am class
+
+Computers are for:
+Automating repetitive tasks
+Video games/ e-entertainment
+Changing our lives
+Lots of other stuff:  See above for 8:00 class notes.
+
+
+# CLASS REFERENCE SHEET (SYLLABUS): http://www.ics.uci.edu/~kay/courses/31/
+# Read it carefully, more than one time, for this class and for every class
+
+
+A typical computer system [slightly enhanced from class]:
+    HARDWARE:  Equipment
+      Internal:  Processor (CPU), Storage (memory, RAM, disks)
+      External, peripherals:  keyboard, mouse, screen, speaker, printer, ...
+    SOFTWARE:  Steps the computer follows.
+    DATA (Ingredients).
+
+    Our focus is mostly on the software (and a little on the data)
+    Software: Instructions
+      Cook's recipes are software, written in terms a cook understands.
+      Algorithm:  Step-by-step process leading to solution of a problem.
+      A recipe is an algorithm, written in language a cook understands.
+      An algorithm written in a form a computer can follow is a
+        COMPUTER PROGRAM.
+      CODE:  The text of a computer program.
