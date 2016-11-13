@@ -1,0 +1,196 @@
+# ICS 31, Thursday 27 October 2016, 11am class
+## TEXT (STRING) PROCESSING
+
+"""
+Text processing gives us complete control over how our text output looks.
+
+A huge amount of everyday programming involves converting data from one
+form to another.  "Massaging" data, cleaning it up.
+
+
+A string is made up of (zero or more) CHARACTERS.
+A character is any keystroke, including
+    spaces, tabs, newlines (collectively WHITE SPACE)
+A string of zero characters is the EMPTY STRING
+    x = ''     x = ""     x = ''''''   x = """"""
+That's not the same thing as a string of blanks
+"""
+y = '    '
+x = ''
+print()
+print(x)
+print(y)
+print(x == y, 'should be False')
+print(len(x) == len(y), 'should be False')
+
+"""
+A string is a SEQUENCE of characters:
+    len(s)       in      for c in s:       s[3]    s[3:5]
+"""
+print()
+s = "Donald Duck"
+print(s)
+print('-->', '\'', '<--')
+print('-->', '\\', '<--')
+print('-->', "'", '<--')
+print(len("\""), 'should be 1')
+print(len(s), 'characters in "', s, '".')
+print(str(len(s)) + 'characters in "' + s + '".')
+print(len(s), 'characters in "', s, '".', sep="")
+print(str(len(s)) + ' characters in "' + s + '".')
+print(len(s), ' characters in "', s, '".', sep="")
+print(len(s), ' characters in "', s, '".', sep="*")
+print(len(s), ' characters in "', s, '".', sep="---")
+
+## STRING METHODS
+
+print()
+print("Does 'on' occur in s?")
+print('on' in s)
+print("Where does the first 'on' occur in s?")
+print('Position number', s.find('on'), 'is the place.')
+t = 'Donald Donkey'
+print(t)
+print("Does 'on' occur in t?")
+print('on' in t)
+print("Where does the first 'on' occur in t?")
+print('Position number', t.find('on'), 'is the place.')
+print("What if it's not there?")
+print(s.find('ok'))
+
+print("Does s start with an 'H'?", s.startswith('H'))
+print("Does s end with 'Don'?", s.endswith('Don'))
+print("Does s end with 'Duck'?", s.endswith('Duck'))
+
+print()
+m = "Mississippi"
+print(m)
+print("How many times does 's' occur in ", m, "?", sep="")
+print(m.count('s'))
+print("How many times does 'is' occur in ", m, "?", sep="")
+print(m.count('is'))
+print("Change each 's' to 'ok' in ", m, sep="")
+print(m.replace('s', 'ok'))
+print("The original variable is unchanged: ", m, ".  Strings are immutable")
+# Of course we can just reassign m
+m = m.replace('s', 'ok')
+print(m, "now changed")
+print("Remove all the 'ok' strings:", m.replace('ok', ''))
+# Insert '***' between the 'o' and the 'k' of each 'ok'
+print(m.replace('ok', 'o***k'))
+
+print()
+s = "FOUR score and SeVeN (that's 87) Years AGO ..."
+print(s)
+print(s.upper())
+print(s.lower())
+print(s.title())
+
+print()
+u = """                   Is                this
+
+where                             the Mississippi
+   is       today?
+
+
+   """
+print(u)
+print(u.split()) # split() divides the string on white space (sp, tab, nl)
+u2 = u.split()   # A list of the "words" in u
+
+v = "Four*Score*and*seven*years*ago****"
+print(v)
+print(v.split('*'))
+# There are empty strings because of the multiple asterisks (with nothing
+# between them).  Use the usual pattern to remove them from the list.
+
+# If split() takes a string and makes a list of its words,
+# it's good to have join(), which takes a list and combines the items
+# into one big string.
+
+print(u2)
+print("Rejoined:", "".join(u2))
+print("Rejoined:", " ".join(u2))
+print("Rejoined:", "---".join(u2))
+print("Rejoined:", "\n".join(u2))
+
+# print(" ".join([1,2,3,4]))
+
+print()
+print('-->' + u + '<--')
+print('-->' + u.strip() + '<--')
+# strip() takes out the leading and trailing white space
+print('-->' + u.lstrip() + '<--')
+print('-->' + u.rstrip() + '<--')
+# If strip's argument is a string, it strips out those characters
+x = "##$%&*(()_++_)(*&^^%$$###@@!!~Hello There###$$%%^&**&^%$#@!!"
+print(x.strip('~!@#$%^&*()_+'))
+
+command = "        A       "
+# Strip white space, convert to lower case
+command = command.strip().lower()
+# or  command = command.strip() ; command = command.lower()
+print("Your cleaned up command is '", command, "'.", sep="")
+"""
+if command == 'a':
+    # Handle adding
+elif command == 'r':
+    # Handle removing
+    ...
+"""
+
+## TRANSLATION
+
+def our_lower(s: str) -> str:
+    ''' Return an alllower-case version of s '''
+    ## Two steps to using the translate() method:
+    ## 1.  Make a TRANSLATION TABLE:
+    table = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                          'abcdefghijklmnopqrstuvwxyz')
+    ## 2.  Do the translation using the translate() method
+    return s.translate(table)
+assert our_lower("FOUR SCORE") == "four score"
+assert our_lower("Four Score") == "four score"
+assert our_lower("four score") == "four score"
+assert our_lower("") == ""
+
+# Another example: Remove punctuation
+
+remove_punct_table = str.maketrans('.,?!:;"',
+                                   '       ')
+s = 'He said, "Go away!  I\'m busy!"  And he went...'
+print(s.translate(remove_punct_table))
+nopunct = s.translate(remove_punct_table)
+print(nopunct.split())
+
+print()
+n1 = "Programmer, Paula"
+n2 = "Anteater,Arnold"
+# Turn these into [firstname, lastname]
+
+def first_and_last(last_comma_first: str) -> 'list of str':
+    ''' Return a two-item list with the first name and last
+        name '''
+    comma_position = last_comma_first.find(",")
+    lastname = last_comma_first[:comma_position]
+    firstname = last_comma_first[comma_position+1:]
+    return [firstname.strip(), lastname]
+assert first_and_last(n1) == ['Paula', 'Programmer']
+assert first_and_last(n2) == ['Arnold', 'Anteater']
+
+## Write a "smart title case" function to uncapitalize "little words"
+
+S = 'War And Peace In The Willows'
+S = S.split()
+
+def smart_title_case(word: str) -> str:
+    ''' Return the word capitalized unless it's a
+        "little word"  '''
+    word = word.lower()
+    if word in ['a', 'an', 'the', 'and', 'or', 'in', 'by',
+                'of', 'with']:
+        return word
+    else:
+        return word.title()  # This still produces "Joe'S"
+for w in S:
+    print(smart_title_case(w))
