@@ -1,0 +1,151 @@
+# ICS 31, Tuesday 15 November 2016, 11am class
+
+"""
+We write programs to model/reflect the real/outside world.
+We do this by combining the building blocks our PL gives us.
+    Actions/verbs:  e.g., new functions or methods, control structures ...
+    Things/nouns/objects:  int float str bool   lists  namedtuples  tuples
+        Combine into lists of NTs, NTs containing lists, ...
+
+Object-oriented programming:  We've been doing this.
+    Organize your program in terms of the real-world objects it processes.
+    How they're built, what things they can do.
+
+Besides the data structures we already know, there are more:
+    More that are built in:   dict   set   ...
+    More that can be built out of what we already have:  Different shapes.
+
+Today's first new shape:  Two-dimensional table, with rows and columns.
+    Normal list, you index the items with one number:  straight line
+        [0], [1], [2], ...
+    With a Table, you index each item with two numbers:
+        Hair stylist chair, hour of the day:  The client scheduled then.
+        x, y for a screen:  value is pixel.
+
+How do we build it?   A list of lists.
+    A list of rows, with each row being a list of data (pixels, clients,
+        classes, ...)
+
+Classrooms:
+"""
+ClassroomTable = [ # HSLH 100       BS3 1200        SSLH 100:  Rooms
+                    ["ICS 6A",      "PSB 9A",       "ICS 31"],  # 9:00 row
+                    ["",            "",             "ICS 32"],  # 10:00 row
+                    ["ECON 20A",    "ICS 6B",       "ICS 60"]   # 11:00 row
+                 ]
+print("Class at room number 0 [HSLH 100], hour number 2 [11:00]:",
+      ClassroomTable[0][2])
+print(ClassroomTable)
+ClassroomTable[0][1] = "ICS 10"
+print(ClassroomTable)
+
+# Print the whole table nicely:
+for row in range(len(ClassroomTable)):
+    print("Row", row, ":", end="")
+    for col in range(len(ClassroomTable[row])):
+        print("{:15s}".format(ClassroomTable[row][col]), end="")
+    print()
+
+### PIXELS ON A SCREEN
+### On our (monochrome) screen, each pixel is either 0 (black) or 1 (white)
+
+def new_screen(rows: int, columns: int) -> '2D table, list of lists':
+    ''' Create and return an empty screen:  A list of rows, with
+        each row a list of pixels going across that row.  All the
+        pixels will be 0 (black).
+    '''
+    result = [ ]
+    for r in range(rows):
+        result.append([0] * columns)  # Could have a for loop to go across
+                                      # pixel by pixel
+    return result
+assert new_screen(4,2) == [ [0,0], [0,0], [0,0], [0,0] ]
+screen = new_screen(10,5)
+print(screen)
+
+def print_screen(s: '2D table, list of lists') -> None:
+    ''' Print screen in matrix form wth # for black, blank for white '''
+    for row in range(len(s)):
+        # Print the row across
+        for col in range(len(s[row])):
+            if s[row][col] == 0:
+                pixel = '#'
+            else:
+                pixel = ' '
+            print(pixel, sep="", end="")
+        print()  # Print newline at end of row
+    return
+print_screen(screen)
+print()
+screen[2][3] = 1
+print_screen(screen)
+print()
+
+def set_row(s: '2D table', rownum: int, value: int) -> None:
+    ''' Change the screen (in place, side effect) so the specified row
+        has the specified value all the way across.
+    '''
+    for col in range(len(s[rownum])):
+        s[rownum][col] = value
+    return
+set_row(screen, 7, 1)
+print_screen(screen)
+print()
+
+def set_col(s: '2D table', column: int, value: int) -> None:
+    ''' Change the screen in place (side effect) so the specified column
+        has the specified value all the way down.'''
+    for row in range(len(s)):
+        s[row][column] = value
+    return
+set_col(screen, 1, 1)
+print_screen(screen)
+print()
+
+"""
+We could also write:
+    set_pixel (s, row, col, val)
+    reverse_pixel(s,row,col)  (if on, turn off; if off, turn on)
+    draw_rectangle(s, UL_x, UL_y, LR_x, LR_y)
+    draw_rectangle(s, UL_x, UL_y, height, width)
+
+
+
+Today's second data structure is built into Python:  Dictionaries (dict)
+    Also called MAPS or TABLES.
+    Dicts give us some things that lists don't.
+    -- Indexing is more flexible.
+        L[num]  Position number, starts at 0, goes to n-1 in sequence.
+        D["Huey"]   The range of keys for indexing is much broader
+        Dictionaries are key-value pairs, where the key can be any
+            immutable-type value.
+    -- The performance of looking something up in a dict
+            ITEM in D
+       is MUCH FASTER than doing the same thing with a list.
+
+Constant lists in Python:
+    L = [ ]
+    L = ['Huey', 'Dewey', 'Louie']
+    L = [r1, r2, r3, r4]
+
+Constant dicts in Python:
+"""
+D = { }    # We use curly braces for dicts
+D = {"Huey": 17, "Dewey": 20, "Louie": 19}   # Key-Value pairs
+# Keys must be immutable (strings, tuples, NTs, ints, ... not lists
+print(D)
+print("Huey's age is", D["Huey"])
+
+"""
+Dictionaries work the way they do (fancy indexing, good performance)
+because they're built using the technique called HASHING (with a data
+structure called a HASH TABLE).
+
+Four "catches" for using dicts:
+-- Keys have to be an immutable type
+-- The values can be anything
+-- The keys must be UNIQUE.
+-- Key-value pairs are NOT ORDERED in the dict.  I.e., you have to let
+    Python choose how to order them.
+
+"""
