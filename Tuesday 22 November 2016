@@ -1,0 +1,226 @@
+"""
+Programming languages provide us with DATA STRUCTURES
+    Predefined:  lists, files, tuples, sets (today)
+    Defined in a library:  namedtuples, random, tkinter, ...
+    Have to build yourself out of what's already available.
+        (Albums and songs, Restaurants and dishes, ...)
+        Other shapes:  Check the libraries before reinventing the wheel.
+    "CLASSIC DATA STRUCTURES":  Ones that have stood the test of time,
+        proven useful in a wide variety of situations.
+
+A set (like a mathematical set) is built in to (predefined in) Python.
+    Collection of items, order doesn't matter, no duplicates.
+    In Python, set must contain immutable types (can't have a set of
+        lists)
+    Sounds like a dictionary, and it is:  Both built using HASH TABLES,
+        which means instant look-up using the "in" operator.
+    Difference:  Dict has key-value pairs, sets have key+value all
+        rolled into one.
+    Sets are useful for collections of unique items or membership in groups
+        (e.g., who's in what major)
+"""
+s = {1, 2, 5, 3, 4}   # Same value as {1,2,3,4,5}.  Like dicts, curly braces
+d = {'a':15, 'b':3, 'c':12}
+empty_dict = { }
+empty_set = { }  # We want to say this, but it's a dict
+print(s)
+print(type(s))
+print(d)
+print(type(d))
+print(type(empty_dict))
+print(type(empty_set))
+empty_set = set()
+print(type(empty_set))
+print()
+
+t = set([2, 4, 6, 8, 10])
+print(t)
+L = [2,6,1,2,3,4,2,5,6,1,2,4,1,4,2,4,3,2,3,1,5,4,3,3,4,5,6]
+unique = set(L)
+print(unique)
+print(list(unique))
+print(sorted(list(unique)))
+
+def duplicates_removed(L: list) -> list:
+    ''' Return the argument with all duplicate values removed
+    '''
+    return list(set(L))
+assert sorted(duplicates_removed(L)) == sorted([1,2,3,4,5,6])
+
+"""
+Operators for membership:
+    in           not in
+Functions:
+    set()       len()
+Operators on sets:
+    union (combine values from 2 sets):     s | t
+    intersection (everything in common):    s & t
+    subtraction (set with some items removed):  s - t
+    symmetric difference (in one but not both): s ^ t
+"""
+print    ("union (combine values from 2 sets):        ", s | t)
+print    ("intersection (everything in common):       ",  s & t)
+print    ("subtraction (set with some items removed): ",  s - t)
+print    ("symmetric difference (in one but not both):", s ^ t)
+
+"""
+Comparisons:
+    s == t      s != t      s < t (strict subset)    <=    >=    >
+
+Methods:
+    s.add(i)            Insert i into s (if not already there)
+    s.remove(i)         Removes item, error if not there
+    s.discard(i)        Removes item, silent if not there
+    s.clear()           Remove everything, result is empty set
+    # These all change s (i.e., they have SIDE EFFECTS)
+"""
+
+
+"""
+Write a program to play the dice game "Craps"
+
+Rules:
+    Roll two dice (each 1-6)
+        If you roll 7 or 11, that's a "Natural" and you win
+        If you roll 2, 3, or 12, that's "Craps" and you lose
+        Any other number becomes "your point"
+            Keep rolling; on each roll:
+                Roll your "point":  "Make your point" and you win
+                Roll 7:  "Crap out" and you lose.
+                Roll anything else, roll again.
+"""
+from random import randrange
+
+def bad_roll() -> int:
+    ''' Roll two dice, return value 2 to 12 '''
+    return randrange(2, 13)
+
+def roll() -> int:
+    ''' Roll two dice, return value 2 to 12 '''
+    return randrange(1, 7) + randrange(1, 7)
+
+tally = [0,0,0,0,0,0,0,0,0,0,0,0,0]    # tally[roll()] += 1
+
+for i in range(500):
+    tally[bad_roll()] += 1
+for num in range(2,13):
+    print("{:2d}. {:5d}".format(num, tally[num]), "#" * tally[num])
+print()
+
+tally = [0,0,0,0,0,0,0,0,0,0,0,0,0]    # tally[roll()] += 1
+
+for i in range(500):
+    tally[roll()] += 1
+for num in range(2,13):
+    print("{:2d}. {:5d}".format(num, tally[num]), "#" * tally[num])
+
+"""
+print()
+for i in range(50):
+    print(roll(), roll(), roll(), roll(), roll())
+
+
+def play_one_game() -> bool:   # Also printing
+    ''' Play one grame of craps, returning True if the player wins
+        and False otherwise, with printed narration.
+    '''
+    first_roll = roll()
+    print("Roll is", first_roll)
+    if first_roll in {7,11}:
+        print("Natural:  Shooter wins")
+        return True
+    elif first_roll in {2,3,12}:
+        print("Craps:  Shooter loses")
+        return False
+    point = first_roll
+    print("Point is", point)
+    return True   #### NOTE:  THIS IS JUST A STUB.  WILL HAVE TO CHANGE.
+"""
+
+def play_one_game() -> bool:   # Also printing
+    ''' Play one grame of craps, returning True if the player wins
+        and False otherwise, with printed narration.
+    '''
+    first_roll = roll()
+    print("Roll is", first_roll)
+    if first_roll in {7,11}:
+        print("Natural:  Shooter wins")
+        return True
+    elif first_roll in {2,3,12}:
+        print("Craps:  Shooter loses")
+        return False
+    point = first_roll
+    print("Point is", point)
+    while True:
+        next_roll = roll()
+        print("Roll is", next_roll)
+        if next_roll == 7:
+            print("Crapped out:  Shooter loses")
+            return False
+        if next_roll == point:
+            print("Made the point:  Shooter wins")
+            return True
+
+"""
+play_one_game()
+print()
+play_one_game()
+print()
+play_one_game()
+print()
+play_one_game()
+print()
+
+
+print("Welcome to the craps game!\n")
+while True:
+    print("Your game:")
+    result = play_one_game()
+    print()
+    print("Computer's game:")
+    result = play_one_game()
+    print()
+    response = input("Would you like to play again (y or n)?: ")
+    if response == 'n':
+        break
+
+
+print("Welcome to the craps game!\n")
+player_wins = 0
+computer_wins = 0
+while True:
+    print("Your game:")
+    result = play_one_game()
+    if result:
+        player_wins += 1
+    print()
+    print("Computer's game:")
+    result = play_one_game()
+    if result:
+        computer_wins += 1
+    print()
+    response = input("Would you like to play again (y or n)?: ")
+    if response == 'n':
+        break
+"""
+
+print("Welcome to the craps game!\n")
+player_wins = 0
+computer_wins = 0
+for i in range(100):
+    print("Your game:")
+    result = play_one_game()
+    if result:
+        player_wins += 1
+    print()
+    print("Computer's game:")
+    result = play_one_game()
+    if result:
+        computer_wins += 1
+    print()
+    # response = input("Would you like to play again (y or n)?: ")
+    # if response == 'n':
+    #   break
+print("Player won", player_wins, "games")
+print("Computer won", computer_wins, "games")
+print("Thanks for playing")
